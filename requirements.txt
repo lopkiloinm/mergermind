@@ -4,3 +4,5 @@ openai
 gunicorn
 python-dotenv
 Werkzeug
+Flask-SQLAlchemy
+PyMySQL

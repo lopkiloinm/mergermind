@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from openai import OpenAI
@@ -12,6 +13,27 @@ UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
+
+# Get the database URL from the environment variable
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('JAWSDB_URL', 'mysql+pymysql://user:password@host/db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# Define your Company model
+class Company(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    revenue = db.Column(db.String(20), nullable=False)
+    market_cap = db.Column(db.String(20), nullable=False)
+    summary = db.Column(db.String(500), nullable=False)
+    categories = db.Column(db.String(200), nullable=False) # Consider using a separate table for categories if it's a complex structure
+    days_ago = db.Column(db.Integer, nullable=False)
+    country = db.Column(db.String(100), nullable=False)
+
+# Create the database and tables (run just once)
+with app.app_context():
+    db.create_all()
 
 # Static data for matchmaking
 COMPANIES = [
@@ -194,27 +216,43 @@ def matchmaking():
     selected_categories = request.args.getlist('filter')  # Get a list of selected filters
     sort_by = request.args.get('sort_by')
 
-    # Sort all companies first based on the selected sort option
+    # Start with all companies from the database
+    companies = Company.query.all()  # Fetch all companies from the database
+
+    # Convert the SQLAlchemy results to a list of dictionaries for easier handling
+    companies_data = [{
+        'name': company.name,
+        'revenue': company.revenue,
+        'market_cap': company.market_cap,
+        'summary': company.summary,
+        'categories': company.categories.split(", "),  # Assuming categories are stored as a comma-separated string
+        'days_ago': company.days_ago,
+        'country': company.country
+    } for company in companies]
+
+    # Step 1: Sort all companies based on the selected sort option
     if sort_by == 'revenue':
-        COMPANIES.sort(key=lambda x: parse_value(x['revenue']), reverse=True)
+        companies_data.sort(key=lambda x: parse_value(x['revenue']), reverse=True)
     elif sort_by == 'market_cap':
-        COMPANIES.sort(key=lambda x: parse_value(x['market_cap']), reverse=True)
+        companies_data.sort(key=lambda x: parse_value(x['market_cap']), reverse=True)
     elif sort_by == 'recently_posted':
-        COMPANIES.sort(key=lambda x: x['days_ago'])
+        companies_data.sort(key=lambda x: x['days_ago'])
 
-    # Separate already sorted companies into those that match the filter and those that don't
-    if selected_categories:
-        matching_companies = [company for company in COMPANIES if any(cat in company['categories'] for cat in selected_categories)]
-        non_matching_companies = [company for company in COMPANIES if all(cat not in company['categories'] for cat in selected_categories)]
-        # Ensure matching companies come first
-        filtered_companies = matching_companies + non_matching_companies
-    else:
-        filtered_companies = copy.deepcopy(COMPANIES)
-
-    # Prepare a set of categories for the dropdown
-    categories = set(cat for company in COMPANIES for cat in company['categories'])
+    # Step 2: Filter companies based on selected categories
+    matching_companies = [company for company in companies_data 
+                          if any(cat in company['categories'] for cat in selected_categories)]
     
-    return render_template('matchmaking.html', companies=filtered_companies, categories=categories, selected_categories=selected_categories, sort_by=sort_by)
+    non_matching_companies = [company for company in companies_data 
+                              if all(cat not in company['categories'] for cat in selected_categories)]
+
+    # Combine matching and non-matching companies, prioritizing matching ones
+    filtered_companies = matching_companies + non_matching_companies
+
+    # Step 3: Prepare a set of categories for the dropdown
+    categories = set(cat for company in companies_data for cat in company['categories'])
+
+    return render_template('matchmaking.html', companies=filtered_companies, 
+                           categories=categories, selected_categories=selected_categories, sort_by=sort_by)
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
