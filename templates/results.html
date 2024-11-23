@@ -18,6 +18,8 @@
         </li>
     {% endfor %}
   </ul>
-  <a href="{{ url_for('due_diligence') }}">Upload another PDF</a>
+  <button type="button" onclick="window.location.href='{{ url_for('due_diligence') }}'" style="background-color: #007bff; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; text-decoration: none;">
+    Upload another PDF
+  </button>
 </div>
 {% endblock %}
