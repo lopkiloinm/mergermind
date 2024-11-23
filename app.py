@@ -161,45 +161,41 @@ def index():
 
 @app.route('/due_diligence', methods=['GET', 'POST'])
 def due_diligence():
+    session['processing_status'] = []  # Clear previous status
     if request.method == 'POST':
-        # Check if the file part is present in the request
         if 'file' not in request.files:
             return redirect(request.url)
-        
+
         file = request.files['file']
 
         # Ensure a valid PDF file
         if file and file.filename.endswith('.pdf'):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-            # Save the file
             file.save(file_path)
 
             try:
-                # Extract text from PDF
+                session['processing_status'].append("Extracting text from PDF...")
                 text = extract_text_from_pdf(file_path)
-                
-                # Remove the file after extracting text
-                os.remove(file_path)
 
-                # Summarize the document
+                session['processing_status'].append("Summarizing document...")
                 summary = summarize_document(text)
 
-                # Analyze the summary
                 results = {}
                 for item in CHECKLIST:
+                    session['processing_status'].append(f"Analyzing: {item}...")
                     analysis_result = analyze_with_openai(summary, item)
                     results[item] = analysis_result
-                
+
+                session['processing_status'].append("Analysis completed!")
                 return render_template('results.html', results=results)
 
             except Exception as e:
-                # Handle exceptions and errors
                 print(f"An error occurred: {e}")
                 return "An error occurred during processing", 500
         else:
             return "Invalid file type. Please upload a PDF.", 400
+
     return render_template('due_diligence.html')
 
 @app.route('/download-example-file')
