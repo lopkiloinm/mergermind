@@ -2,11 +2,12 @@
 {% block content %}
 <h2>Due Diligence</h2>
 <p>
-    The Due Diligence process allows you to evaluate the financial and operational health of a company. By uploading documents such as financial statements or legal contracts, you can analyze the key aspects that are important in assessing potential risks and benefits before making investment decisions or forming business partnerships.
+ The Due Diligence process allows you to evaluate the financial and operational health of a company. By uploading documents such as financial statements or legal contracts, you can analyze the key aspects that are important in assessing potential risks and benefits before making investment decisions or forming business partnerships.
 </p>
 <p>
-    Please ensure the document is in PDF format and structured in a way that highlights the company's financial stability, legal compliance, and operational efficiency.
+ Please ensure the document is in PDF format and structured in a way that highlights the company's financial stability, legal compliance, and operational efficiency.
 </p>
+
 <div style="text-align: center; margin-top: 30px;">
     <form method="post" enctype="multipart/form-data" id="upload-form" style="display: inline-block;">
         <div style="border: 2px dotted #007bff; padding: 40px; width: 300px; max-width: 100%; margin-bottom: 20px;">
@@ -17,9 +18,12 @@
     </form>
 </div>
 
+<!-- Status updates section -->
+<div id="status" style="text-align: center; margin-top: 20px;"></div>
+
 <!-- Notes about Heroku's timeout -->
 <p style="text-align: center; font-size: 14px; color: #555; max-width: 500px; margin: 20px auto;">
-    Note: Heroku imposes a 30-second request timeout. For larger documents, consider splitting them into smaller parts to avoid timeout errors. 
+ Note: Heroku imposes a 30-second request timeout. For larger documents, consider splitting them into smaller parts to avoid timeout errors.
 </p>
 
 <div style="text-align: center;">
@@ -28,4 +32,21 @@
        Download Example File
     </a>
 </div>
+
+<script>
+    function updateStatus() {
+        fetch('/get_processing_status') // Endpoint to get the session status
+            .then(response => response.json())
+            .then(data => {
+                const statusElement = document.getElementById('status');
+                statusElement.innerHTML = ''; // Clear previous status
+                data.status.forEach(item => {
+                    statusElement.innerHTML += `<p>${item}</p>`;
+                });
+            });
+    }
+
+    setInterval(updateStatus, 2000); // Poll every 2 seconds
+</script>
+
 {% endblock %}
