@@ -11,8 +11,8 @@
 <div style="text-align: center; margin-top: 30px;">
     <form method="post" enctype="multipart/form-data" id="upload-form" style="display: inline-block;">
         <div style="border: 2px dotted #007bff; padding: 40px; width: 300px; max-width: 100%; margin-bottom: 20px;">
-            <button type="button" style="background-color: #007bff; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; width: 100%;" onclick="document.getElementById('file-input').click();">Select File to Upload</button>
-            <input type="file" name="file" accept="application/pdf" id="file-input" style="display: none;" required onchange="this.form.submit();">
+            <button type="button" id="upload-button" style="background-color: #007bff; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; width: 100%;" onclick="document.getElementById('file-input').click();">Select File to Upload</button>
+            <input type="file" name="file" accept="application/pdf" id="file-input" style="display: none;" required onchange="handleFileSelect();">
         </div>
         <p style="margin: 0; font-size: 14px; color: #555;">or drag & drop</p>
     </form>
@@ -34,19 +34,32 @@
 </div>
 
 <script>
-    function updateStatus() {
-        fetch('/get_processing_status') // Endpoint to get the session status
-            .then(response => response.json())
-            .then(data => {
-                const statusElement = document.getElementById('status');
-                statusElement.innerHTML = ''; // Clear previous status
-                data.status.forEach(item => {
-                    statusElement.innerHTML += `<p>${item}</p>`;
-                });
+function handleFileSelect() {
+    // Get the upload button and file input elements
+    var uploadButton = document.getElementById('upload-button');
+    var fileInput = document.getElementById('file-input');
+
+    // Disable the button and change its style
+    uploadButton.disabled = true;
+    uploadButton.style.backgroundColor = '#ccc'; // Light gray color to indicate disabled state
+    uploadButton.style.cursor = 'not-allowed'; // Change the cursor to indicate it's not clickable
+
+    // Submit the form
+    document.getElementById('upload-form').submit();
+}
+
+function updateStatus() {
+    fetch('/get_processing_status') // Endpoint to get the session status
+        .then(response => response.json())
+        .then(data => {
+            const statusElement = document.getElementById('status');
+            statusElement.innerHTML = ''; // Clear previous status
+            data.status.forEach(item => {
+                statusElement.innerHTML += `<p>${item}</p>`;
             });
-    }
+        });
+}
 
-    setInterval(updateStatus, 2000); // Poll every 2 seconds
+setInterval(updateStatus, 2000); // Poll every 2 seconds
 </script>
-
 {% endblock %}
