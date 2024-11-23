@@ -3,10 +3,8 @@ from flask import Flask, request, render_template, redirect, url_for
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from openai import OpenAI
-from dotenv import load_dotenv
 import copy
 
-load_dotenv()
 openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 app = Flask(__name__)
 
