@@ -8,8 +8,11 @@ import copy
 load_dotenv()
 openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 app = Flask(__name__)
+
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 # Static data for matchmaking
 COMPANIES = [
