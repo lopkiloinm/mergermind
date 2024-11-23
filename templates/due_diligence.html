@@ -1,5 +1,4 @@
 {% extends 'layout.html' %}
-
 {% block content %}
 <h2>Due Diligence</h2>
 <p>
@@ -8,7 +7,6 @@
 <p>
     Please ensure the document is in PDF format and structured in a way that highlights the company's financial stability, legal compliance, and operational efficiency.
 </p>
-
 <div style="text-align: center; margin-top: 30px;">
     <form method="post" enctype="multipart/form-data" id="upload-form" style="display: inline-block;">
         <div style="border: 2px dotted #007bff; padding: 40px; width: 300px; max-width: 100%; margin-bottom: 20px;">
@@ -16,6 +14,20 @@
             <input type="file" name="file" accept="application/pdf" id="file-input" style="display: none;" required onchange="this.form.submit();">
         </div>
         <p style="margin: 0; font-size: 14px; color: #555;">or drag & drop</p>
+    </form>
+</div>
+
+<!-- Notes about Heroku's timeout and sample file -->
+<p style="text-align: center; font-size: 14px; color: #555; max-width: 500px; margin: 20px auto;">
+    Note: Heroku imposes a 30-second request timeout. For larger documents, consider splitting them into smaller parts to avoid timeout errors. 
+</p>
+
+<div style="text-align: center;">
+    <form method="post" action="/due_diligence" style="display: inline-block;">
+        <button type="submit" name="sample_file" value="acme_company_report.pdf"
+                style="background-color: #28a745; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; margin: 10px 0;">
+            Use Sample File: acme_company_report.pdf
+        </button>
     </form>
 </div>
 {% endblock %}
