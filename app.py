@@ -1,7 +1,7 @@
 import pymysql
 pymysql.install_as_MySQLdb()
 import os
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
