@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2>Matchmaking</h2>
+<form method="get" action="{{ url_for('matchmaking') }}" id="filter-form">
+    <label for="category">Filter by Category:</label>
+    <select name="category" id="category" onchange="addFilter(this);">
+        <option value="">All</option>
+        {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+    <label for="sort_by">Sort By:</label>
+    <select name="sort_by" id="sort_by" onchange="this.form.submit();">
+        <option value="">None</option>
+        <option value="revenue" {% if sort_by == 'revenue' %}selected{% endif %}>Revenue</option>
+        <option value="market_cap" {% if sort_by == 'market_cap' %}selected{% endif %}>Market Cap</option>
+        <option value="recently_posted" {% if sort_by == 'recently_posted' %}selected{% endif %}>Recently Posted</option>
+    </select>
+    {% for category in selected_categories %}
+        <input type="hidden" name="filter" value="{{ category }}">
+    {% endfor %}
+</form>
+<!-- Display active filters as blue bubbles -->
+<div style="margin-top: 10px;">
+    {% for selected_category in selected_categories %}
+        <span class="bubble" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 12px; margin-right: 5px;">
+            {{ selected_category }}
+            <a href="#" onclick="removeFilter('{{ selected_category }}'); return false;" style="color: white; text-decoration: none;">&times;</a>
+        </span>
+    {% endfor %}
+</div>
+<div class="company-list">
+    {% for company in companies %}
+        <div class="company-box">
+            <div class="company-info">
+                <div class="posted-days">{{ company.days_ago }} days ago</div>
+                <div class="company-name">{{ company.name }}</div>
+                <div class="summary">{{ company.summary }}</div>
+                <div class="location-category">
+                    <span class="location">{{ company.country }}</span>
+                    <span class="categories">
+                        {% for category in company.categories %}
+                            <span class="bubble {% if category in selected_categories %}active{% endif %}">{{ category }}</span>
+                        {% endfor %}
+                    </span>
+                </div>
+            </div>
+            <div style="margin-top: 10px; text-align: right;"></div>
+                <div class="financial-info">
+                    <div class="label">Revenue</div>
+                    <div class="revenue">{{ company.revenue }}</div>
+                    <br>
+                    <div class="label">Market Cap</div>
+                    <div class="market-cap">{{ company.market_cap }}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<style>
+.bubble {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #e0e0e0; /* Default state for category bubbles */
+    border-radius: 12px;
+    margin: 2px;
+}
+.bubble.active {
+    background: #007bff; /* Active state for filtered category bubbles */
+    color: white;
+}
+</style>
+<script>
+// Function to add a filter to the form
+function addFilter(selectElement) {
+    const selectedValue = selectElement.value;
+    if (selectedValue) {
+        // Add new filter as a hidden input field
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'filter';
+        input.value = selectedValue;
+        document.getElementById('filter-form').appendChild(input);
+        selectElement.value = ""; // Reset the select dropdown
+        // Submit the form to apply filter
+        document.getElementById('filter-form').submit();
+    }
+}
+
+// Function to remove a specific filter
+function removeFilter(category) {
+    let formData = new FormData();
+    const currentFilters = Array.from(new URLSearchParams(window.location.search).entries());
+    currentFilters.forEach(([key, value]) => {
+        if (key !== 'filter' || value !== category) {
+            formData.append(key, value);
+        }
+    });
+    // Update the URL to reflect the current filters
+    const searchParams = new URLSearchParams(formData);
+    window.location.search = searchParams.toString(); // Redirect to URL with remaining filters
+}
+</script>
+{% endblock %}

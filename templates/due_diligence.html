@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h2>Due Diligence</h2>
+<p>
+    The Due Diligence process allows you to evaluate the financial and operational health of a company. By uploading documents such as financial statements or legal contracts, you can analyze the key aspects that are important in assessing potential risks and benefits before making investment decisions or forming business partnerships.
+</p>
+<p>
+    Please ensure the document is in PDF format and structured in a way that highlights the company's financial stability, legal compliance, and operational efficiency.
+</p>
+
+<div style="text-align: center; margin-top: 30px;">
+    <form method="post" enctype="multipart/form-data" id="upload-form" style="display: inline-block;">
+        <div style="border: 2px dotted #007bff; padding: 40px; width: 300px; max-width: 100%; margin-bottom: 20px;">
+            <button type="button" style="background-color: #007bff; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; width: 100%;" onclick="document.getElementById('file-input').click();">Select File to Upload</button>
+            <input type="file" name="file" accept="application/pdf" id="file-input" style="display: none;" required onchange="this.form.submit();">
+        </div>
+        <p style="margin: 0; font-size: 14px; color: #555;">or drag & drop</p>
+    </form>
+</div>
+{% endblock %}
