@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request, render_template, redirect, url_for
+from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -143,23 +144,45 @@ def index():
 @app.route('/due_diligence', methods=['GET', 'POST'])
 def due_diligence():
     if request.method == 'POST':
+        # Check if the file part is present in the request
+        if 'file' not in request.files:
+            return redirect(request.url)
+
         file = request.files['file']
+
+        # Ensure a valid PDF file
         if file and file.filename.endswith('.pdf'):
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
+            # Save the file
             file.save(file_path)
 
-            text = extract_text_from_pdf(file_path)
-            os.remove(file_path)  # Remove the file after extracting text
+            try:
+                # Extract text from PDF
+                text = extract_text_from_pdf(file_path)
 
-            # Summarize the document once
-            summary = summarize_document(text)
+                # Remove the file after extracting text
+                os.remove(file_path)
 
-            results = {}
-            for item in CHECKLIST:
-                analysis_result = analyze_with_openai(summary, item)
-                results[item] = analysis_result
+                # Summarize the document
+                summary = summarize_document(text)
 
-            return render_template('results.html', results=results)
+                # Analyze the summary
+                results = {}
+                for item in CHECKLIST:
+                    analysis_result = analyze_with_openai(summary, item)
+                    results[item] = analysis_result
+
+                return render_template('results.html', results=results)
+
+            except Exception as e:
+                # Handle exceptions and errors
+                print(f"An error occurred: {e}")
+                return "An error occurred during processing", 500
+
+        else:
+            return "Invalid file type. Please upload a PDF.", 400
 
     return render_template('due_diligence.html')
 
