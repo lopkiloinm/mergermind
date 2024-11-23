@@ -158,7 +158,7 @@ def parse_value(value):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index/index.html')
 
 @app.route('/due_diligence', methods=['GET', 'POST'])
 def due_diligence():
@@ -178,7 +178,7 @@ def due_diligence():
             try:
                 session['processing_status'].append("Uploading file...")
                 session.modified = True
-                
+
                 session['processing_status'].append("Extracting text from PDF...")
                 text = extract_text_from_pdf(file_path)
 
@@ -192,7 +192,7 @@ def due_diligence():
                     results[item] = analysis_result
 
                 session['processing_status'].append("Analysis completed!")
-                return render_template('results.html', results=results)
+                return render_template('results/results.html', results=results)
 
             except Exception as e:
                 print(f"An error occurred: {e}")
@@ -200,7 +200,7 @@ def due_diligence():
         else:
             return "Invalid file type. Please upload a PDF.", 400
 
-    return render_template('due_diligence.html')
+    return render_template('due_diligence/due_diligence.html')
 
 @app.route('/get_processing_status')
 def get_processing_status():
@@ -237,7 +237,7 @@ def matchmaking():
     # Prepare a set of categories for the dropdown
     categories = sorted(set(cat for company in COMPANIES for cat in company['categories']))
     
-    return render_template('matchmaking.html', companies=filtered_companies, categories=categories, selected_categories=selected_categories, sort_by=sort_by)
+    return render_template('matchmaking/matchmaking.html', companies=filtered_companies, categories=categories, selected_categories=selected_categories, sort_by=sort_by)
 
 if __name__ == '__main__':
     if not os.path.exists(UPLOAD_FOLDER):
