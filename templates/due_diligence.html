@@ -50,13 +50,28 @@ function handleFileSelect() {
 
 function updateStatus() {
     fetch('/get_processing_status') // Endpoint to get the session status
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Received status data:", data); // Log fetched data for debugging
             const statusElement = document.getElementById('status');
             statusElement.innerHTML = ''; // Clear previous status
-            data.status.forEach(item => {
-                statusElement.innerHTML += `<p>${item}</p>`;
-            });
+            if (data.status.length === 0) {
+                statusElement.innerHTML = 'No status updates available.';
+            } else {
+                data.status.forEach(item => {
+                    statusElement.innerHTML += `<p>${item}</p>`;
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching status:', error);
+            const statusElement = document.getElementById('status');
+            statusElement.innerHTML = 'Error fetching status updates.';
         });
 }
 
