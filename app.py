@@ -176,6 +176,9 @@ def due_diligence():
             file.save(file_path)
 
             try:
+                session['processing_status'].append("Uploading file...")
+                session.modified = True
+                
                 session['processing_status'].append("Extracting text from PDF...")
                 text = extract_text_from_pdf(file_path)
 
