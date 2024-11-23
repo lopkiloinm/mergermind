@@ -18,12 +18,12 @@
         </li>
     {% endfor %}
   </ul>
-  <div style="display: flex; justify-content: center; margin-top: 20px;"></div>
+  <div style="display: flex; justify-content: center; margin-top: 20px;">
     <button type="button" onclick="window.location.href='{{ url_for('due_diligence') }}'" 
             style="background-color: #007bff; color: white; border: none; padding: 15px 30px; 
                    cursor: pointer; font-size: 16px; text-decoration: none;">
         Upload another PDF
     </button>
-</div>
+  </div>
 </div>
 {% endblock %}
