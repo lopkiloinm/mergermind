@@ -98,6 +98,7 @@ CHECKLIST = [
 ]
 
 def extract_text_from_pdf(file_path):
+    """Extract text from the PDF file."""
     reader = PdfReader(file_path)
     text = ""
     for page in reader.pages:
@@ -105,12 +106,11 @@ def extract_text_from_pdf(file_path):
     return text
 
 def summarize_document(text):
+    """Summarize the document text using OpenAI."""
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "user", "content": [
-                {"type": "text", "text": "Please summarize the key points of the following document:\n\n" + text}
-            ]}
+            {"role": "user", "content": "Please summarize the key points of the following document:\n\n" + text}
         ],
         response_format={"type": "text"},
         temperature=0.5,
@@ -119,20 +119,18 @@ def summarize_document(text):
         frequency_penalty=0,
         presence_penalty=0
     )
-
     if response.choices and len(response.choices) > 0:
         return response.choices[0].message.content.strip()
     else:
         raise ValueError("No valid summary received from OpenAI API.")
 
 def analyze_with_openai(summary, checklist_item):
+    """Analyze the summary against checklist items using OpenAI."""
     prompt = f"Does the document's key points indicate meeting the {checklist_item} criteria?"
     response = openai_client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "user", "content": [
-                {"type": "text", "text": prompt + "\n\nSummary:\n" + summary}
-            ]}
+            {"role": "user", "content": prompt + "\n\nSummary:\n" + summary}
         ],
         response_format={"type": "text"},
         temperature=0.1,
@@ -141,7 +139,6 @@ def analyze_with_openai(summary, checklist_item):
         frequency_penalty=0,
         presence_penalty=0
     )
-
     if response.choices and len(response.choices) > 0:
         return response.choices[0].message.content.strip()
     else:
@@ -150,14 +147,13 @@ def analyze_with_openai(summary, checklist_item):
 def parse_value(value):
     """Convert revenue or market cap string to a float."""
     if value.endswith('K'):
-        return float(value[1:-1]) * 1_000  # Remove $ and K, convert to float and multiply by 1000
+        return float(value[1:-1]) * 1_000
     elif value.endswith('M'):
-        return float(value[1:-1]) * 1_000_000  # Remove $ and M, convert to float and multiply by 1 million
+        return float(value[1:-1]) * 1_000_000
     elif value.endswith('B'):
-        return float(value[1:-1]) * 1_000_000_000  # Remove $ and B, convert to float and multiply by 1 billion
+        return float(value[1:-1]) * 1_000_000_000
     else:
-        # Handle case where there's no suffix, e.g., "$500"
-        return float(value[1:])  # Remove $ sign and convert to float
+        return float(value[1:])  # Handle case where there's no suffix
 
 @app.route('/')
 def index():
@@ -169,21 +165,21 @@ def due_diligence():
         # Check if the file part is present in the request
         if 'file' not in request.files:
             return redirect(request.url)
-
+        
         file = request.files['file']
 
         # Ensure a valid PDF file
         if file and file.filename.endswith('.pdf'):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            
+
             # Save the file
             file.save(file_path)
 
             try:
                 # Extract text from PDF
                 text = extract_text_from_pdf(file_path)
-
+                
                 # Remove the file after extracting text
                 os.remove(file_path)
 
@@ -195,17 +191,15 @@ def due_diligence():
                 for item in CHECKLIST:
                     analysis_result = analyze_with_openai(summary, item)
                     results[item] = analysis_result
-
+                
                 return render_template('results.html', results=results)
 
             except Exception as e:
                 # Handle exceptions and errors
                 print(f"An error occurred: {e}")
                 return "An error occurred during processing", 500
-
         else:
             return "Invalid file type. Please upload a PDF.", 400
-
     return render_template('due_diligence.html')
 
 @app.route('/download-example-file')
