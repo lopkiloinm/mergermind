@@ -10,11 +10,13 @@
 
 <div style="text-align: center; margin-top: 30px;">
     <form method="post" enctype="multipart/form-data" id="upload-form" style="display: inline-block;">
-        <div style="border: 2px dotted #007bff; padding: 40px; width: 300px; max-width: 100%; margin-bottom: 20px;">
-            <button type="button" id="upload-button" style="background-color: #007bff; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; width: 100%;" onclick="document.getElementById('file-input').click();">Select File to Upload</button>
+        <div id="drop-area" style="border: 2px dashed #007bff; padding: 40px; width: 300px; max-width: 100%; margin-bottom: 20px; text-align: center;">
+            <button type="button" id="upload-button" style="background-color: #007bff; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; width: 100%;" onclick="document.getElementById('file-input').click();">
+                Select File to Upload
+            </button>
             <input type="file" name="file" accept="application/pdf" id="file-input" style="display: none;" required onchange="handleFileSelect();">
+            <p style="margin: 20px 0; font-size: 14px; color: #555;">or drag & drop</p>
         </div>
-        <p style="margin: 0; font-size: 14px; color: #555;">or drag & drop</p>
     </form>
 </div>
 
@@ -34,15 +36,34 @@
 </div>
 
 <script>
-function handleFileSelect() {
-    // Get the upload button and file input elements
-    var uploadButton = document.getElementById('upload-button');
-    var fileInput = document.getElementById('file-input');
+document.getElementById('drop-area').addEventListener('dragover', function(event) {
+    event.preventDefault(); // Prevent default behavior
+});
 
-    // Disable the button and change its style
-    uploadButton.disabled = true;
-    uploadButton.style.backgroundColor = '#ccc'; // Light gray color to indicate disabled state
-    uploadButton.style.cursor = 'not-allowed'; // Change the cursor to indicate it's not clickable
+document.getElementById('drop-area').addEventListener('dragleave', function(event) {
+    // Optional: You can add additional UI changes here if you want
+});
+
+document.getElementById('drop-area').addEventListener('drop', function(event) {
+    event.preventDefault(); // Prevent default behavior and stop propagation
+
+    const files = event.dataTransfer.files; // Get the files from the drop event
+    if (files.length > 0) {
+        // Set the file to the input
+        document.getElementById('file-input').files = files;
+        handleFileSelect(); // Call your existing file selection handler
+    }
+});
+
+// Your existing handleFileSelect function
+function handleFileSelect() {
+    var uploadButton = document.getElementById('upload-button');
+    uploadButton.disabled = true; // Disable the button
+    uploadButton.style.backgroundColor = '#ccc'; // Change color to indicate disabled
+    uploadButton.style.cursor = 'not-allowed'; // Change cursor to not-allowed
+
+    // Show initial upload status message
+    // document.getElementById('status').innerHTML = 'Uploading file...';
 
     // Submit the form
     document.getElementById('upload-form').submit();
