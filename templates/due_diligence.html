@@ -17,17 +17,15 @@
     </form>
 </div>
 
-<!-- Notes about Heroku's timeout and sample file -->
+<!-- Notes about Heroku's timeout -->
 <p style="text-align: center; font-size: 14px; color: #555; max-width: 500px; margin: 20px auto;">
     Note: Heroku imposes a 30-second request timeout. For larger documents, consider splitting them into smaller parts to avoid timeout errors. 
 </p>
 
 <div style="text-align: center;">
-    <form method="post" action="/due_diligence" style="display: inline-block;">
-        <button type="submit" name="sample_file" value="acme_company_report.pdf"
-                style="background-color: #28a745; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; margin: 10px 0;">
-            Use Sample File: acme_company_report.pdf
-        </button>
-    </form>
+    <a href="{{ url_for('download_example_file') }}"
+       style="background-color: #28a745; color: white; border: none; padding: 15px 30px; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; margin-top: 10px;">
+       Download Example File
+    </a>
 </div>
 {% endblock %}

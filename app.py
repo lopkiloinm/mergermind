@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from openai import OpenAI
@@ -183,6 +183,11 @@ def due_diligence():
             return "Invalid file type. Please upload a PDF.", 400
 
     return render_template('due_diligence.html')
+
+@app.route('/download-example-file')
+def download_example_file():
+    # Ensure this path correctly matches where your example file is stored
+    return send_from_directory(directory='.', path='acme_company_report.pdf', as_attachment=True)
 
 @app.route('/matchmaking', methods=['GET'])
 def matchmaking():
