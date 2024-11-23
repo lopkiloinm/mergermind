@@ -236,7 +236,7 @@ def matchmaking():
         filtered_companies = copy.deepcopy(COMPANIES)
 
     # Prepare a set of categories for the dropdown
-    categories = set(cat for company in COMPANIES for cat in company['categories'])
+    categories = sorted(set(cat for company in COMPANIES for cat in company['categories']))
     
     return render_template('matchmaking.html', companies=filtered_companies, categories=categories, selected_categories=selected_categories, sort_by=sort_by)
 
