@@ -10,6 +10,7 @@ import copy
 
 openai_client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'your_default_secret_key_here')
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
