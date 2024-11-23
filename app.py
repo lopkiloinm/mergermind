@@ -1,7 +1,7 @@
 import pymysql
 pymysql.install_as_MySQLdb()
 import os
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory, session
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
@@ -198,6 +198,11 @@ def due_diligence():
             return "Invalid file type. Please upload a PDF.", 400
 
     return render_template('due_diligence.html')
+
+@app.route('/get_processing_status')
+def get_processing_status():
+    # Return the current processing status from the session as JSON.
+    return jsonify({'status': session.get('processing_status', [])})
 
 @app.route('/download-example-file')
 def download_example_file():
