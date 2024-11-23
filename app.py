@@ -229,9 +229,9 @@ def matchmaking():
     # Separate already sorted companies into those that match the filter and those that don't
     if selected_categories:
         matching_companies = [company for company in COMPANIES if any(cat in company['categories'] for cat in selected_categories)]
-        non_matching_companies = [company for company in COMPANIES if all(cat not in company['categories'] for cat in selected_categories)]
+        #non_matching_companies = [company for company in COMPANIES if all(cat not in company['categories'] for cat in selected_categories)]
         # Ensure matching companies come first
-        filtered_companies = matching_companies + non_matching_companies
+        filtered_companies = matching_companies #+ non_matching_companies
     else:
         filtered_companies = copy.deepcopy(COMPANIES)
 
