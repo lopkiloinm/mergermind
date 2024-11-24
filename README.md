@@ -39,6 +39,15 @@ Mergermind was developed to address the significant pain point of summarizing an
 
 In addition to facilitating thorough document analysis, Mergermind incorporates a feature that enables users to search for companies using various filters. This functionality further enhances the app’s utility by offering users an efficient method to discover potential merger targets that meet their specific criteria.
 
+## TODO List for Future Potential Features
+
+- **User Credentials Management:** Implement a secure user authentication system to manage user credentials and enhance data security.
+- **Vector Database Integration:** Establish a vector database of companies that can store embeddings of company profiles.
+- **Embedding Model for Matchmaking Page:** Integrate an embedding model on the matchmaking page that can use cosine similarity to sort companies by relevance to user prompts.
+- **Enhanced Data Visualization:** Create visual dashboards to provide insights into company data and due diligence results.
+- **Collaboration Tools:** Introduce functionalities for teams to collaborate on due diligence processes within the app.
+- **Notification System:** Implement a notification system that alerts users to updates or changes in the due diligence status of companies they are tracking.
+
 ## Conclusion
 
 In conclusion, Mergermind was crafted in response to the complexities faced by M&A professionals during the due diligence process. By leveraging the capabilities of the gpt-4o-mini model and employing a variety of programming languages and frameworks, we created a fully functional application that simplifies document analysis and enhances the overall experience in the M&A landscape. This project opened the door to advanced prompt engineering, iterative development, and a deeper understanding of AI integration within practical applications. Mergermind not only solves key issues within the industry but also lays the groundwork for further enhancements as user needs evolve.
