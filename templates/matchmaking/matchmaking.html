@@ -1,18 +1,5 @@
 {% extends '../layout.html' %}
 {% block content %}
-<style>
-  .bubble {
-    display: inline-block;
-    padding: 5px 10px;
-    background: #e0e0e0; /* Default state for category bubbles */
-    border-radius: 12px;
-    margin: 2px;
-  }
-  .bubble.active {
-    background: #007bff; /* Active state for filtered category bubbles */
-    color: white;
-  }
-</style>
 <h2>Matchmaking</h2>
 <form method="get" action="{{ url_for('matchmaking') }}" id="filter-form">
   <label for="category">Filter by Category:</label>
@@ -70,5 +57,18 @@
     </div>
   {% endfor %}
 </div>
+<style>
+.bubble {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #e0e0e0; /* Default state for category bubbles */
+    border-radius: 12px;
+    margin: 2px;
+}
+.bubble.active {
+    background: #007bff; /* Active state for filtered category bubbles */
+    color: white;
+}
+</style>
 <script src="matchmaking.js"></script>
 {% endblock %}
