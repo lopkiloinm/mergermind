@@ -1,115 +1,114 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 header {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 0;
-  text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
 }
 nav a {
-  color: #fff;
-  margin: 0 15px;
-  text-decoration: none;
+    color: #fff;
+    margin: 0 15px;
+    text-decoration: none;
 }
 main {
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 form {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 input[type="file"] {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
 }
 button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 /* Styles for Company Matchmaking Section */
 .company-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-top: 20px; /* Add space above the company list */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 20px; /* Add space above the company list */
 }
 .company-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  background-color: #fff; /* Matches form background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s ease;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #fff;  /* Matches form background */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: box-shadow 0.2s ease;
+    margin-bottom: 20px;
 }
 .company-box:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .company-info {
-  flex: 1;
-  margin-right: 20px; /* Space between info and revenue */
+    flex: 1;
+    margin-right: 20px; /* Space between info and revenue */
 }
 .posted-days {
-  font-size: 0.9em;
-  color: #666;
-  margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
 }
 .company-name {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 .summary {
-  color: #333;
-  margin-bottom: 10px;
+    color: #333;
+    margin-bottom: 10px;
 }
 .location-category {
-  display: flex;
-  align-items: left;
-  font-size: 0.9em;
-  color: #555;
+    display: flex;
+    align-items: left;
+    font-size: 0.9em;
+    color: #555;
 }
 .location {
-  margin-right: 10px;
-  margin-top: 7px;
+    margin-right: 10px;
+    margin-top: 7px;
 }
 .financial-info {
-  margin-top: 5px;
-  text-align: right; /* Align text to the right */
-  display: block;
+    margin-top: 5px;
+    text-align: right; /* Align text to the right */
+    display: block;
 }
 .financial-info .label {
-  font-size: 0.8em; /* Smaller font size */
-  color: gray; /* Gray color for label text */
-  display: block;
+    font-size: 0.8em; /* Smaller font size */
+    color: gray; /* Gray color for label text */
+    display: block;
 }
-.revenue,
-.market-cap {
-  font-size: 1.2em; /* Increase font size */
-  font-weight: bold; /* Bold font weight */
-  display: block;
+.revenue, .market-cap {
+    font-size: 1.2em; /* Increase font size */
+    font-weight: bold; /* Bold font weight */
+    display: block;
 }
 .bubble {
-  display: inline-block;
-  padding: 4px 8px;
-  background: #e0e0e0;
-  border-radius: 12px;
-  margin: 2px;
+    display: inline-block;
+    padding: 4px 8px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    margin: 2px;
 }
