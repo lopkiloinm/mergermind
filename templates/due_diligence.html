@@ -1,4 +1,4 @@
-{% extends '../layout.html' %} {% block content %}
+{% extends 'layout.html' %} {% block content %}
 <h2>Due Diligence</h2>
 <p>
   The Due Diligence process allows you to evaluate the financial and operational
@@ -97,5 +97,5 @@
   </a>
 </div>
 
-<script src="due_diligence.js"></script>
+<script src="{{ url_for('static', filename='js/matchmaking.js') }}"></script>
 {% endblock %}
