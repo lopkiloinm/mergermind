@@ -1,0 +1,60 @@
+{% extends 'layout.html' %} {% block content %}
+<h2>Welcome to the Mergermind Platform</h2>
+<p>
+  Streamline your M&A activities with our intuitive platform, designed
+  specifically for professionals in the mergers and acquisitions space.
+</p>
+
+<h3>Key Features</h3>
+<ul>
+  <li>
+    <strong>AI-Powered Due Diligence:</strong>
+    <p>
+      Upload your PDF documents containing company reports or information. Our
+      platform leverages advanced AI capabilities to extract key insights and
+      summarize the essential points. It evaluates the document against crucial
+      due diligence criteria such as financial stability, legal compliance, and
+      operational efficiency.
+    </p>
+  </li>
+  <li>
+    <strong>Robust Matchmaking:</strong>
+    <p>
+      Connect with potential acquisition or merger candidates effortlessly.
+      Filter companies based on categories, revenue, market cap, and recent
+      activity to find the best matches tailored to your strategic goals.
+    </p>
+  </li>
+</ul>
+
+<h3>How It Works</h3>
+<ol>
+  <li>Upload the document you wish to analyze for due diligence.</li>
+  <li>
+    Our platform extracts text from the PDF file and provides a summary of the
+    key points.
+  </li>
+  <li>
+    Using cutting-edge AI, it assesses the summary against our due diligence
+    checklist and delivers insightful analysis results.
+  </li>
+  <li>
+    Explore the matchmaking feature to find companies that match your filters
+    and preferences.
+  </li>
+</ol>
+
+<h3>Get Started</h3>
+<p>
+  To begin, navigate to the
+  <a href="{{ url_for('due_diligence') }}">Due Diligence</a> page to upload your
+  document, or head to the
+  <a href="{{ url_for('matchmaking') }}">Matchmaking</a> section to explore
+  opportunities.
+</p>
+
+<p>
+  Join us in simplifying the M&A process while harnessing the power of AI to
+  make informed decisions.
+</p>
+{% endblock %}
